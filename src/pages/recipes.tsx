@@ -85,18 +85,25 @@ export default function Recipes() {
   const { searchBoxValue } = useSearchBox();
   const { data: session } = useSession();
 
+  const [debouncedSearch, setDebouncedSearch] =
+    React.useState(searchBoxValue);
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [availableTags, setAvailableTags] = React.useState<string[]>([]);
   const [showLoadingIndicator, setShowLoadingIndicator] = React.useState(false);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setDebouncedSearch(searchBoxValue), 300);
+    return () => clearTimeout(timer);
+  }, [searchBoxValue]);
 
   const {
     data: recipes,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags],
-    queryFn: () => fetchAllRecipes(searchBoxValue, sortOption, selectedTags),
+    queryKey: ["recipes", debouncedSearch, sortOption, selectedTags],
+    queryFn: () => fetchAllRecipes(debouncedSearch, sortOption, selectedTags),
   });
 
   const router = useRouter();

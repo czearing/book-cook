@@ -218,17 +218,7 @@ export default function Recipes() {
                     title={recipe?.title}
                     id={recipe?._id}
                     emoji={recipe?.emoji || ""}
-                    createdDate={
-                      recipe?.createdAt &&
-                      new Date(recipe?.createdAt).toLocaleDateString(
-                        undefined,
-                        {
-                          month: "short",
-                          day: "numeric",
-                          year: "numeric",
-                        }
-                      )
-                    }
+                    createdDate={recipe?.createdAt}
                     imageSrc={recipe?.imageURL}
                     tags={recipe?.tags}
                   />

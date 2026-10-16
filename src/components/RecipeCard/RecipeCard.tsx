@@ -7,7 +7,9 @@ import { useRecipeCardStyles } from "./RecipeCard.styles";
 import type { RecipeCardProps } from "./RecipeCard.types";
 import { RecipeActions } from "../RecipeActions";
 
-export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
+export const RecipeCard = React.memo(function RecipeCard(
+  props: RecipeCardProps
+): React.ReactElement {
   const { title, createdDate, imageSrc, tags, id, emoji, isMinimal } = props;
   const router = useRouter();
   const cardRef = React.useRef<HTMLDivElement>(null);
@@ -141,4 +143,4 @@ export const RecipeCard: React.FC<RecipeCardProps> = (props) => {
       </div>
     </Card>
   );
-};
+});

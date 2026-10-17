@@ -100,4 +100,6 @@ Limitations: this demonstrates a large-collection client interaction in a local 
 
 ## Delivery
 
-Requested publication is origin/master, not origin/main. All local publication gates have passed. Remote publication and readback are pending at this record's implementation commit; a delivery-only follow-up records the observed outcome. The existing workflow targets main only, so no master CI run is claimed.
+Published directly to origin/master by a non-force fast-forward from 37eb5615 to implementation commit 0b92dbd073f595c4af893ac80ebbe07eb8675967 on October 17, 2026. `git ls-remote origin refs/heads/master` independently returned that exact commit after the push. This delivery-only follow-up records the observed publication; application code and measured artifacts are unchanged. The existing workflow targets main only, so no master CI run is claimed.
+
+No blockers remain. Other worktrees and main were left unchanged. Full raw measurements, visual evidence, reproduction commands, and focused verification are included in the published implementation commit.

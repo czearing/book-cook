@@ -1,0 +1,115 @@
+{
+  "baseURL": "http://localhost:3157",
+  "browser": "153.0.8010.12",
+  "checks": [
+    "Pending search and changed results retain matching DOM nodes",
+    "Sorting updates card order",
+    "Tag filtering and clearing replace the collection",
+    "Recipe-action context saves the correct recipe and refetches updated data",
+    "Empty results replace stale cards and clearing search restores results",
+    "Updated cards navigate to the correct recipe detail"
+  ],
+  "errors": [],
+  "requests": [
+    {
+      "method": "GET",
+      "path": "/api/recipes",
+      "query": "?search=&sortProperty=createdAt&sortDirection=desc"
+    },
+    {
+      "method": "GET",
+      "path": "/api/auth/session",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/recipes",
+      "query": "?search=chicken&sortProperty=createdAt&sortDirection=desc"
+    },
+    {
+      "method": "GET",
+      "path": "/api/recipes",
+      "query": "?search=chicken&sortProperty=title&sortDirection=desc"
+    },
+    {
+      "method": "GET",
+      "path": "/api/recipes",
+      "query": "?search=&sortProperty=title&sortDirection=desc"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/recipes",
+      "query": "?search=&sortProperty=title&sortDirection=desc&tags=dessert"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/recipes",
+      "query": "?search=&sortProperty=title&sortDirection=desc"
+    },
+    {
+      "method": "PUT",
+      "path": "/api/recipes/recipe-9",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/recipes",
+      "query": "?search=&sortProperty=title&sortDirection=desc"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/recipes",
+      "query": "?search=no-matching-recipe&sortProperty=title&sortDirection=desc"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/recipes",
+      "query": "?search=&sortProperty=title&sortDirection=desc"
+    },
+    {
+      "method": "GET",
+      "path": "/api/tags",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/recipes/recipe-9",
+      "query": ""
+    },
+    {
+      "method": "GET",
+      "path": "/api/users/lookup",
+      "query": "?userId=perf-user"
+    },
+    {
+      "method": "GET",
+      "path": "/api/user/sharedWithUsers",
+      "query": "?owner=perf-user&user=perf%40example.test"
+    }
+  ]
+}

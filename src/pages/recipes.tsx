@@ -5,7 +5,7 @@ import type {
   OptionOnSelectData,
 } from "@fluentui/react-components";
 import { makeStyles } from "@griffel/react";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
 
@@ -85,8 +85,7 @@ export default function Recipes() {
   const { searchBoxValue } = useSearchBox();
   const { data: session } = useSession();
 
-  const [debouncedSearch, setDebouncedSearch] =
-    React.useState(searchBoxValue);
+  const [debouncedSearch, setDebouncedSearch] = React.useState(searchBoxValue);
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [availableTags, setAvailableTags] = React.useState<string[]>([]);
@@ -100,19 +99,64 @@ export default function Recipes() {
   const {
     data: recipes,
     isLoading,
+    isPlaceholderData,
     error,
   } = useQuery({
     queryKey: ["recipes", debouncedSearch, sortOption, selectedTags],
     queryFn: () => fetchAllRecipes(debouncedSearch, sortOption, selectedTags),
+    placeholderData: keepPreviousData,
   });
 
   const router = useRouter();
+
+  const recipeGrid = React.useMemo(
+    () => (
+      <RecipeProvider>
+        <FallbackScreen
+          isLoading={showLoadingIndicator}
+          isError={Boolean(error)}
+          dataLength={recipes?.length}
+        >
+          <div className={styles.grid}>
+            {recipes?.map((recipe, index) => (
+              <div
+                key={recipe._id}
+                className={`${styles.fadeIn} ${styles.cardWrapper}`}
+                style={
+                  {
+                    "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
+                  } as React.CSSProperties
+                }
+              >
+                <RecipeCard
+                  title={recipe?.title}
+                  id={recipe?._id}
+                  emoji={recipe?.emoji || ""}
+                  createdDate={recipe?.createdAt}
+                  imageSrc={recipe?.imageURL}
+                  tags={recipe?.tags}
+                />
+              </div>
+            ))}
+          </div>
+        </FallbackScreen>
+      </RecipeProvider>
+    ),
+    [
+      recipes,
+      showLoadingIndicator,
+      error,
+      styles.grid,
+      styles.fadeIn,
+      styles.cardWrapper,
+    ],
+  );
 
   // Extract unique tags from recipes
   React.useEffect(() => {
     if (recipes?.length) {
       const uniqueTags = Array.from(
-        new Set(recipes.flatMap((recipe) => recipe.tags || []))
+        new Set(recipes.flatMap((recipe) => recipe.tags || [])),
       );
       setAvailableTags(uniqueTags);
     }
@@ -121,7 +165,7 @@ export default function Recipes() {
   React.useEffect(() => {
     let timer: NodeJS.Timeout;
 
-    if (isLoading) {
+    if (isLoading || isPlaceholderData) {
       timer = setTimeout(() => {
         setShowLoadingIndicator(true);
       }, 300);
@@ -130,7 +174,7 @@ export default function Recipes() {
     }
 
     return () => clearTimeout(timer);
-  }, [isLoading]);
+  }, [isLoading, isPlaceholderData]);
 
   React.useEffect(() => {
     const { tag } = router.query;
@@ -144,7 +188,7 @@ export default function Recipes() {
 
   const onSortOptionSelect = (
     _ev: SelectionEvents,
-    data: OptionOnSelectData
+    data: OptionOnSelectData,
   ) => {
     if (data.selectedOptions?.[0]) {
       setSortOption(data.selectedOptions[0]);
@@ -156,78 +200,47 @@ export default function Recipes() {
   }
 
   return (
-    <RecipeProvider>
-      <div className={styles.pageContainer}>
-        <div className={styles.header}>
-          <div className={styles.titleSection}>
-            <Title3 as="h1">My Recipes</Title3>
-            <Text
-              size={200}
-              weight="medium"
-              style={{ color: "var(--colorNeutralForeground2)" }}
-            >
-              {recipes?.length} recipes{" "}
-              {searchBoxValue
-                ? `matching "${searchBoxValue}"`
-                : "in your collection"}
-              {selectedTags.length > 0 &&
-                ` with tags: ${selectedTags.join(", ")}`}
-            </Text>
-          </div>
-          <div className={styles.controlsRow}>
-            <div className={styles.searchWrapper}>
-              <SearchBar />
-            </div>
-            <Dropdown
-              className={styles.sortDropdown}
-              appearance="outline"
-              onOptionSelect={onSortOptionSelect}
-              defaultSelectedOptions={["dateNewest"]}
-              defaultValue={"Sort by date (newest)"}
-            >
-              <Option value={"dateNewest"}>Sort by date (newest)</Option>
-              <Option value={"dateOldest"}>Sort by date (oldest)</Option>
-              <Option value={"ascTitle"}>Sort by title (asc)</Option>
-              <Option value={"descTitle"}>Sort by title (desc)</Option>
-            </Dropdown>
-            <TagPicker
-              availableTags={availableTags}
-              selectedTags={selectedTags}
-              onTagsChange={setSelectedTags}
-            />
-          </div>
+    <div className={styles.pageContainer}>
+      <div className={styles.header}>
+        <div className={styles.titleSection}>
+          <Title3 as="h1">My Recipes</Title3>
+          <Text
+            size={200}
+            weight="medium"
+            style={{ color: "var(--colorNeutralForeground2)" }}
+          >
+            {recipes?.length} recipes{" "}
+            {searchBoxValue
+              ? `matching "${searchBoxValue}"`
+              : "in your collection"}
+            {selectedTags.length > 0 &&
+              ` with tags: ${selectedTags.join(", ")}`}
+          </Text>
         </div>
-        <FallbackScreen
-          isLoading={showLoadingIndicator}
-          isError={Boolean(error)}
-          dataLength={recipes?.length}
-        >
-          <div className={styles.grid}>
-            {recipes?.map((recipe, index) => {
-              return (
-                <div
-                  key={recipe._id}
-                  className={`${styles.fadeIn} ${styles.cardWrapper}`}
-                  style={
-                    {
-                      "--fadeInDelay": `${Math.min(index * 0.1, 0.3)}s`,
-                    } as React.CSSProperties
-                  }
-                >
-                  <RecipeCard
-                    title={recipe?.title}
-                    id={recipe?._id}
-                    emoji={recipe?.emoji || ""}
-                    createdDate={recipe?.createdAt}
-                    imageSrc={recipe?.imageURL}
-                    tags={recipe?.tags}
-                  />
-                </div>
-              );
-            })}
+        <div className={styles.controlsRow}>
+          <div className={styles.searchWrapper}>
+            <SearchBar />
           </div>
-        </FallbackScreen>
+          <Dropdown
+            className={styles.sortDropdown}
+            appearance="outline"
+            onOptionSelect={onSortOptionSelect}
+            defaultSelectedOptions={["dateNewest"]}
+            defaultValue={"Sort by date (newest)"}
+          >
+            <Option value={"dateNewest"}>Sort by date (newest)</Option>
+            <Option value={"dateOldest"}>Sort by date (oldest)</Option>
+            <Option value={"ascTitle"}>Sort by title (asc)</Option>
+            <Option value={"descTitle"}>Sort by title (desc)</Option>
+          </Dropdown>
+          <TagPicker
+            availableTags={availableTags}
+            selectedTags={selectedTags}
+            onTagsChange={setSelectedTags}
+          />
+        </div>
       </div>
-    </RecipeProvider>
+      {recipeGrid}
+    </div>
   );
 }

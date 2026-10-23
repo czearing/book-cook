@@ -101,3 +101,24 @@ Remaining limitation: master integration is blocked, not complete. No applicatio
 ## Integration Follow-up, 2026-10-23
 
 The user explicitly requested immediate master integration. The shared worktree still fails full types only on the unrelated untracked AccountSection test fixture. Rather than edit another task's files or waive the check, validate the exact task-only commit in an isolated Git worktree inside this repository, using the installed dependencies. Integration is pending these clean-tree checks. The original shared worktree and unrelated edits must remain intact.
+
+### Clean-tree acceptance evidence
+
+The task-only integration tree excludes unrelated uncommitted work, not tests through configuration changes. All tracked unit tests remain enabled.
+
+- `yarn tsc --noEmit --incremental false`: passed.
+- `yarn test --runInBand`: passed, 4 suites, 16 tests, 1 snapshot.
+- `yarn lint`: passed.
+- `yarn eslint src\components\Settings\Settings.tsx tests\e2e\settings-dividers.spec.ts`: passed.
+- `yarn prettier --check --config prettierrc.json src\components\Settings\Settings.tsx tests\e2e\settings-dividers.spec.ts`: passed.
+- `yarn build`: passed, including type checking, compilation, static generation, and build traces. Existing Browserslist and dependency Edge Runtime warnings remain.
+- `yarn playwright test settings-dividers.spec.ts --workers=1`: passed, 2 tests covering desktop/mobile, both themes, keyboard, and filtering against the clean integration tree.
+- `git diff --check`: passed.
+
+The initial integration worktree location inside `.next` made Jest ignore the worktree's test paths. Moved it to `.settings-integration` and ran the entire tracked suite successfully, without changing Jest configuration or allowing empty tests.
+Prettier configuration discovery differed in the nested tree. Explicitly selected the tracked `prettierrc.json` and formatted the two task code files accordingly. Final production file: 128 lines; regression file: 111 lines. Formatting changes only; browser assertions rerun afterward.
+
+### Final acceptance and delivery
+
+Accepted: all six acceptance criteria now have evidence in the exact task-only tree. The earlier shared-worktree type failure belongs to an excluded, unrelated uncommitted fixture and does not affect this integration tree.
+Task-only commits are ready for fast-forward delivery to `origin/master`, with no force push and no unrelated changes. Remote master SHA will be checked after the push before reporting completion. This final clean-tree evidence supersedes the earlier blocked decision; original evidence remains above for provenance.

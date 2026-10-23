@@ -1,28 +1,22 @@
-import * as React from "react";
-import {
-  tokens,
-  Spinner,
-  Accordion,
-  SearchBox,
-  accordionItemClassNames,
-} from "@fluentui/react-components";
-import type { AccordionToggleEventHandler } from "@fluentui/react-components";
-import { makeStyles, shorthands } from "@griffel/react";
-import { useSession } from "next-auth/react";
+import * as React from 'react';
+import { tokens, Spinner, Accordion, SearchBox, accordionItemClassNames } from '@fluentui/react-components';
+import type { AccordionToggleEventHandler } from '@fluentui/react-components';
+import { makeStyles, shorthands } from '@griffel/react';
+import { useSession } from 'next-auth/react';
 
-import { AccountSection } from "./AccountSection/AccountSection";
-import { AppearanceSection } from "./AppearanceSection/AppearanceSection";
-import { sectionIds } from "./constants";
-import { SettingsSearchContext } from "./context";
-import { RecipePreferencesSection } from "./RecipePreferencesSection/RecipePreferencesSection";
-import { SharingSection } from "./SharingSection/SharingSection";
-import { Unauthorized } from "../FallbackScreens";
+import { AccountSection } from './AccountSection/AccountSection';
+import { AppearanceSection } from './AppearanceSection/AppearanceSection';
+import { sectionIds } from './constants';
+import { SettingsSearchContext } from './context';
+import { RecipePreferencesSection } from './RecipePreferencesSection/RecipePreferencesSection';
+import { SharingSection } from './SharingSection/SharingSection';
+import { Unauthorized } from '../FallbackScreens';
 
 const useStyles = makeStyles({
   page: {
-    maxWidth: "800px",
-    margin: "0 auto",
-    padding: "12px",
+    maxWidth: '800px',
+    margin: '0 auto',
+    padding: '12px',
   },
   title: {
     fontSize: tokens.fontSizeBase600,
@@ -34,45 +28,35 @@ const useStyles = makeStyles({
   subtitle: {
     fontSize: tokens.fontSizeBase200,
     color: tokens.colorNeutralForeground3,
-    margin: "4px 0 0 0",
+    margin: '4px 0 0 0',
   },
   content: {
-    ...shorthands.padding("24px"),
-    display: "flex",
-    flexDirection: "column",
-    gap: "24px",
+    ...shorthands.padding('24px'),
+    display: 'flex',
+    flexDirection: 'column',
+    gap: '24px',
   },
   sections: {
-    [`& > .${accordionItemClassNames.root} ~ .${accordionItemClassNames.root}`]:
-      {
-        ...shorthands.borderTop(
-          tokens.strokeWidthThin,
-          "solid",
-          tokens.colorNeutralStroke2,
-        ),
-      },
+    [`& > .${accordionItemClassNames.root} ~ .${accordionItemClassNames.root}`]: {
+      ...shorthands.borderTop(tokens.strokeWidthThin, 'solid', tokens.colorNeutralStroke2),
+    },
   },
   noResults: {
     color: tokens.colorNeutralForeground3,
-    textAlign: "center",
-    padding: "16px",
-    fontStyle: "italic",
+    textAlign: 'center',
+    padding: '16px',
+    fontStyle: 'italic',
   },
 });
 
 export const SettingsPage = () => {
   const styles = useStyles();
   const { data: session, status } = useSession();
-  const [searchTerm, setSearchTerm] = React.useState("");
-  const [visibleSectionIds, setVisibleSectionIds] = React.useState<Set<string>>(
-    new Set(),
-  );
+  const [searchTerm, setSearchTerm] = React.useState('');
+  const [visibleSectionIds, setVisibleSectionIds] = React.useState<Set<string>>(new Set());
   const [openItems, setOpenItems] = React.useState<string[]>([]); // Add state for open accordion items
 
-  const handleSearchChange = (
-    _event: React.FormEvent<HTMLElement>,
-    data: { value: string },
-  ) => {
+  const handleSearchChange = (_event: React.FormEvent<HTMLElement>, data: { value: string }) => {
     setSearchTerm(data.value.toLowerCase());
   };
 
@@ -80,10 +64,10 @@ export const SettingsPage = () => {
     () => ({
       searchTerm,
       addVisibleSection: (id: string) => {
-        setVisibleSectionIds((prev) => new Set(prev).add(id));
+        setVisibleSectionIds(prev => new Set(prev).add(id));
       },
       removeVisibleSection: (id: string) => {
-        setVisibleSectionIds((prev) => {
+        setVisibleSectionIds(prev => {
           const newSet = new Set(prev);
           newSet.delete(id);
           return newSet;
@@ -101,11 +85,11 @@ export const SettingsPage = () => {
 
   React.useEffect(() => {
     if (searchTerm) {
-      setOpenItems(sectionIds.filter((id) => visibleSectionIds.has(id)));
+      setOpenItems(sectionIds.filter(id => visibleSectionIds.has(id)));
     }
   }, [searchTerm, visibleSectionIds]);
 
-  if (status === "loading") {
+  if (status === 'loading') {
     return <Spinner label="Loading settings..." />;
   }
 
@@ -118,15 +102,9 @@ export const SettingsPage = () => {
       <div className={styles.content}>
         <div>
           <h1 className={styles.title}>Settings</h1>
-          <p className={styles.subtitle}>
-            Manage your account and application preferences
-          </p>
+          <p className={styles.subtitle}>Manage your account and application preferences</p>
         </div>
-        <SearchBox
-          placeholder="Search settings"
-          onChange={handleSearchChange}
-          value={searchTerm}
-        />
+        <SearchBox placeholder="Search settings" onChange={handleSearchChange} value={searchTerm} />
         <SettingsSearchContext.Provider value={settingsContextValue}>
           <Accordion
             className={styles.sections}
@@ -142,9 +120,7 @@ export const SettingsPage = () => {
             <SharingSection />
             <AccountSection />
           </Accordion>
-          {searchTerm && !hasVisibleSections && (
-            <div className={styles.noResults}>No matching settings found</div>
-          )}
+          {searchTerm && !hasVisibleSections && <div className={styles.noResults}>No matching settings found</div>}
         </SettingsSearchContext.Provider>
       </div>
     </div>

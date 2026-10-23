@@ -1,5 +1,7 @@
 import { makeStyles, shorthands } from "@griffel/react";
 
+import { sizing } from "../../theme/sizingTokens";
+
 export const useNewRecipeButtonStyles = makeStyles({
   toolbarButton: {
     display: "flex",
@@ -8,7 +10,7 @@ export const useNewRecipeButtonStyles = makeStyles({
     color: "#ffffff",
     fontWeight: "500",
     fontSize: "14px",
-    height: "36px",
+    height: sizing.control,
     textWrap: "nowrap",
     ...shorthands.padding("0", "20px"),
     ...shorthands.borderRadius("8px"),

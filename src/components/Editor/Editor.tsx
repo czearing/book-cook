@@ -4,6 +4,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 
 import type { EditorProps } from "./Editor.types";
 import { getEditorExtensions } from "./utils";
+import { sizing } from "../theme/sizingTokens";
 
 const useStyles = makeStyles({
   editorWrapper: {
@@ -15,7 +16,7 @@ const useStyles = makeStyles({
     fontSize: "15px",
   },
   editorContentArea: {
-    minHeight: "200px",
+    minHeight: sizing.editor,
     ...shorthands.padding(tokens.spacingVerticalS, tokens.spacingHorizontalM),
     outline: "none",
   },

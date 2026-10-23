@@ -20,8 +20,11 @@ const customJestConfig = {
     "!**/__mocks__/**",
     "!eslint.config.js",
     "!jest.setup.ts",
+    "!tests/e2e/**",
+    "!playwright.config.ts",
   ],
   testEnvironment: "jsdom",
+  testPathIgnorePatterns: ["/node_modules/", "/.next/", "/tests/e2e/"],
   setupFilesAfterEnv: ["<rootDir>/jest.setup.ts"],
   transformIgnorePatterns: [
     "/node_modules/(?!(string-width|strip-ansi|ansi-regex|wrap-ansi)/)",

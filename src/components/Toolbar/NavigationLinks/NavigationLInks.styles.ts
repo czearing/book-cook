@@ -1,5 +1,7 @@
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 
+import { sizing } from "../../theme/sizingTokens";
+
 export const useNavigationStyles = makeStyles({
   linkStyles: {
     display: "flex",
@@ -21,7 +23,7 @@ export const useNavigationStyles = makeStyles({
       bottom: "4px",
       left: "50%",
       width: "0",
-      height: "2px",
+      height: sizing.underline,
       backgroundColor: tokens.colorBrandBackground,
       transform: "translateX(-50%)",
       transition: "width 0.2s ease-in-out",

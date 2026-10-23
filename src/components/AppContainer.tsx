@@ -2,12 +2,14 @@ import * as React from "react";
 import { FluentProvider } from "@fluentui/react-components";
 import { SessionProvider } from "next-auth/react";
 
+import { useControlStyles } from "./theme/controlStyles";
 import { SearchBoxProvider, ThemeProvider, useTheme } from "../context";
 
 import { Toolbar } from ".";
 
 const AppContent: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   const { theme } = useTheme();
+  const controlStyles = useControlStyles();
 
   const fluentProviderStyles = React.useMemo(
     () => ({
@@ -17,7 +19,7 @@ const AppContent: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
       fontFamily: `"Nunito", "Segoe UI", -apple-system, BlinkMacSystemFont, sans-serif`,
       transition: "background-color 0.3s ease, color 0.3s ease",
     }),
-    [theme]
+    [theme],
   );
 
   const [searchBoxValue, setSearchBoxValue] = React.useState("");
@@ -26,7 +28,11 @@ const AppContent: React.FC<{ children?: React.ReactNode }> = ({ children }) => {
   };
 
   return (
-    <FluentProvider theme={theme} style={fluentProviderStyles}>
+    <FluentProvider
+      theme={theme}
+      style={fluentProviderStyles}
+      className={controlStyles.provider}
+    >
       <SearchBoxProvider value={{ searchBoxValue, onSearchBoxValueChange }}>
         <Toolbar />
         <div style={{ padding: "12px 24px", boxSizing: "border-box" }}>

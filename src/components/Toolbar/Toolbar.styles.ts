@@ -1,11 +1,13 @@
 import { tokens } from "@fluentui/react-components";
 import { makeStyles, shorthands } from "@griffel/react";
 
+import { sizing } from "../theme/sizingTokens";
+
 export const useToolbarStyles = makeStyles({
   root: {
     position: "sticky",
     top: "0px",
-    height: "60px",
+    height: sizing.toolbar,
     width: "100%",
     display: "flex",
     flexDirection: "row",

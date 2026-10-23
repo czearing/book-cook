@@ -1,6 +1,9 @@
 import { tokens } from "@fluentui/react-components";
 import { makeStyles, shorthands } from "@griffel/react";
 
+import { controlSurface, singleLineControl } from "../theme/controlStyles";
+import { sizing } from "../theme/sizingTokens";
+
 export const useStyles = makeStyles({
   container: {
     display: "flex",
@@ -11,18 +14,11 @@ export const useStyles = makeStyles({
     position: "relative",
   },
   inputContainer: {
+    ...controlSurface,
+    ...singleLineControl,
     display: "flex",
     alignItems: "center",
-    ...shorthands.borderRadius("8px"),
-    ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
     ...shorthands.padding("0", "12px"),
-    height: "36px",
-    backgroundColor: tokens.colorNeutralBackground1,
-    transition: "all 0.2s ease",
-    ":focus-within": {
-      ...shorthands.borderColor(tokens.colorBrandStroke1),
-      boxShadow: `0 0 0 1px ${tokens.colorBrandStroke1}`,
-    },
   },
   searchIcon: {
     color: tokens.colorNeutralForeground3,
@@ -31,6 +27,7 @@ export const useStyles = makeStyles({
   },
   input: {
     flex: 1,
+    minWidth: 0,
     border: "none",
     outline: "none",
     backgroundColor: "transparent",
@@ -55,14 +52,14 @@ export const useStyles = makeStyles({
   },
   dropdown: {
     position: "absolute",
-    top: "40px",
+    top: `calc(${sizing.control} + ${tokens.spacingVerticalXS})`,
     left: 0,
     right: 0,
     backgroundColor: tokens.colorNeutralBackground1,
     ...shorthands.borderRadius("8px"),
     boxShadow: tokens.shadow8,
     zIndex: 100,
-    maxHeight: "200px",
+    maxHeight: sizing.suggestionList,
     overflowY: "auto",
     animationName: {
       from: {

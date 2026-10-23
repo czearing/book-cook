@@ -3,7 +3,6 @@ import { Input, Radio, RadioGroup } from "@fluentui/react-components";
 import { PaintBrush24Regular } from "@fluentui/react-icons";
 import { makeStyles } from "@griffel/react";
 
-
 import { appearanceSectionId } from "../constants";
 import { useSettingsSection } from "../context";
 import { SettingsSection, SettingItem } from "../SettingShared";
@@ -13,7 +12,6 @@ import { useTheme } from "../../../context";
 
 const useStyles = makeStyles({
   colorInput: {
-    height: "32px",
     minWidth: "40px",
     cursor: "pointer",
   },
@@ -47,7 +45,7 @@ export const AppearanceSection: React.FC = () => {
 
   const handleThemePreferenceChange = (
     _: React.FormEvent<HTMLDivElement>,
-    data: { value: string }
+    data: { value: string },
   ) => {
     setThemePreference(data.value as ThemePreference);
   };

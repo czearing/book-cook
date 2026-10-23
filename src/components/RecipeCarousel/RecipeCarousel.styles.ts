@@ -1,6 +1,8 @@
 import { tokens } from "@fluentui/react-components";
 import { makeStyles, shorthands } from "@griffel/react";
 
+import { sizing } from "../theme/sizingTokens";
+
 export const useRecipeCarouselStyles = makeStyles({
   root: {
     display: "flex",
@@ -68,7 +70,7 @@ export const useRecipeCarouselStyles = makeStyles({
     justifyContent: "center",
     minWidth: "40px",
     width: "40px",
-    height: "40px",
+    height: sizing.carouselButton,
     maxWidth: "40px",
     ...shorthands.padding(0),
     ...shorthands.borderRadius(tokens.borderRadiusCircular),
@@ -115,7 +117,7 @@ export const useRecipeCarouselStyles = makeStyles({
     ...shorthands.padding("0"),
     ...shorthands.margin("0"),
     width: "8px",
-    height: "8px",
+    height: sizing.paginationDot,
     ...shorthands.borderRadius(tokens.borderRadiusCircular),
     backgroundColor: tokens.colorNeutralBackground4,
     transitionProperty: "width, background-color",
@@ -141,7 +143,7 @@ export const useRecipeCarouselStyles = makeStyles({
     display: "flex",
     flexDirection: "column",
     ...shorthands.gap(tokens.spacingHorizontalS),
-    height: "280px",
+    height: sizing.recipeCard,
     ...shorthands.borderRadius("12px"),
     ...shorthands.border("1px", "solid", tokens.colorNeutralStroke1),
     transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",
@@ -149,7 +151,7 @@ export const useRecipeCarouselStyles = makeStyles({
     ...shorthands.padding("16px"),
   },
   skeletonImage: {
-    height: "150px",
+    height: sizing.skeletonImage,
   },
   skeletonTitle: {
     height: tokens.fontSizeBase500,

@@ -98,3 +98,7 @@ storybook-static/
 .eslintcache
 
 package-manifest.json
+
+# Browser regression artifacts
+test-results/
+playwright-report/

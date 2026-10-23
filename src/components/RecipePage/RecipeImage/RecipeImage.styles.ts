@@ -1,13 +1,15 @@
 import { makeStyles } from "@fluentui/react-components";
 
+import { sizing } from "../../theme/sizingTokens";
+
 export const useStyles = makeStyles({
   imageContainer: {
     width: "45%",
-    height: "380px",
+    height: sizing.recipeImage,
     position: "relative",
     "@media (max-width: 768px)": {
       width: "100%",
-      height: "320px",
+      height: sizing.recipeImageCompact,
       marginBottom: "20px",
     },
   },

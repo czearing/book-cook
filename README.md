@@ -37,3 +37,14 @@ yarn install
 # Start the development server
 yarn dev
 ```
+
+### Recipe editor checkboxes
+
+At the start of a line, type `[] ` or `[ ] ` (including the trailing space)
+to create an unchecked task, or `[x] ` for a completed task. Click the checkbox
+or focus it and press Space to toggle it. Checked states are saved with the recipe.
+Ordinary bullet and numbered lists keep their existing shortcuts.
+
+Run checkbox regressions with `yarn test --runInBand Editor`.
+Install Chromium once with `yarn playwright install chromium`, then run the
+isolated browser save/reload flow with `yarn test:e2e`.

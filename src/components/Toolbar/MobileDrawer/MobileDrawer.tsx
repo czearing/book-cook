@@ -1,4 +1,4 @@
-import * as React from "react";
+import * as React from 'react';
 import {
   Button,
   Drawer,
@@ -7,13 +7,13 @@ import {
   DrawerHeaderTitle,
   Divider,
   mergeClasses,
-} from "@fluentui/react-components";
-import { Add24Regular, Dismiss24Regular } from "@fluentui/react-icons";
+} from '@fluentui/react-components';
+import { Add24Regular, Dismiss24Regular } from '@fluentui/react-icons';
 
-import { useMobileDrawerStyles } from "./MobileDrawer.styles";
-import type { MobileDrawerProps } from "./MobileDrawer.types";
-import { navLinks } from "../constants";
-import { SearchBar } from "../SearchBar";
+import { useMobileDrawerStyles } from './MobileDrawer.styles';
+import type { MobileDrawerProps } from './MobileDrawer.types';
+import { navLinks } from '../constants';
+import { SearchBar } from '../SearchBar';
 
 const MobileDrawer: React.FC<MobileDrawerProps> = ({
   isOpen,
@@ -25,11 +25,7 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
   const styles = useMobileDrawerStyles();
 
   return (
-    <Drawer
-      open={isOpen}
-      onOpenChange={(_, { open }) => onOpenChange(open)}
-      position="end"
-    >
+    <Drawer open={isOpen} onOpenChange={(_, { open }) => onOpenChange(open)} position="end">
       <DrawerHeader>
         <DrawerHeaderTitle
           action={
@@ -53,14 +49,12 @@ const MobileDrawer: React.FC<MobileDrawerProps> = ({
           </div>
 
           <div className={styles.navSection}>
-            {navLinks.map((link) => (
+            {navLinks.map(link => (
               <Button
                 key={link.url}
                 appearance="subtle"
-                className={mergeClasses(
-                  styles.mobileNavLink,
-                  currentPath === link.url && styles.activeLink
-                )}
+                aria-current={currentPath === link.url ? 'page' : undefined}
+                className={mergeClasses(styles.mobileNavLink, currentPath === link.url && styles.activeLink)}
                 onClick={() => {
                   onNavigate(link.url);
                   onOpenChange(false);

@@ -53,9 +53,10 @@ No performance claims. No new external services or secrets. Dependency and adapt
 
 ## Acceptance Decision
 
-All functional and quality criteria accepted with passing evidence. Integration is authorized and ready; record remote SHA after successful non-forced delivery before claiming completion.
+Accepted. All functional, quality, and integration criteria have evidence. No unresolved required gate remains.
 
 ## Delivery
 
 Record: `agent-records/2026-10-23-local-changes-integration.md`.
-All remaining user-authorized changes are in scope and all required checks pass. Deliver as a fast-forward push to master, with original task records retained and updated to reference this combined evidence. No unrelated uncommitted files remain outside the authorized scope.
+All remaining user-authorized changes were committed in `b64f8b641ea7a41d431ad39939362d9cdcf4ea2d`. `git push origin HEAD:master` succeeded as a fast-forward from `56df61b`; `git ls-remote --heads origin master` returned the exact delivery SHA. `git status --short` returned no entries afterward.
+Original task records are retained and updated to reference this combined evidence. This record-only follow-up persists the observed delivery result. Remaining limitation: browser evidence is Chromium with isolated API fixtures, not a production deployment or live database test.

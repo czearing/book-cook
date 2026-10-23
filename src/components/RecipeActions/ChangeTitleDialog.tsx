@@ -12,6 +12,8 @@ import {
   tokens,
 } from "@fluentui/react-components";
 
+import { sizing } from "../theme/sizingTokens";
+
 const useStyles = makeStyles({
   dialogSurface: {
     maxWidth: "450px",
@@ -36,7 +38,7 @@ const useStyles = makeStyles({
     flexGrow: 1,
     fontSize: tokens.fontSizeBase300,
     lineHeight: tokens.lineHeightBase300,
-    minHeight: "80px",
+    minHeight: sizing.textArea,
     resize: "none",
   },
   dialogActions: {

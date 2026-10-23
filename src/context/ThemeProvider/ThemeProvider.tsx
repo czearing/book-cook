@@ -1,19 +1,13 @@
 import * as React from "react";
 import type { Theme } from "@fluentui/react-components";
 
-import {
-  DEFAULT_THEME_PREFERENCE,
-  DEFAULT_PRIMARY_COLOR,
-  LOCAL_STORAGE_PRIMARY_COLOR_KEY,
-  LOCAL_STORAGE_THEME_PREFERENCE_KEY,
-  LOCAL_STORAGE_CACHED_THEME_KEY,
-} from "./themeConstants";
+import { LOCAL_STORAGE_CACHED_THEME_KEY } from "./themeConstants";
 import type {
   ThemeMode,
   ThemePreference,
   ThemeContextProps,
-  InitialValues,
 } from "./ThemeProvider.types";
+import { getInitialValues, persistThemeData } from "./themeStorage";
 
 import {
   createDynamicLightTheme,
@@ -23,57 +17,8 @@ import {
 import { useThemeDetector } from "../../hooks";
 
 const ThemeContext = React.createContext<ThemeContextProps | undefined>(
-  undefined
+  undefined,
 );
-
-const getInitialValues = (): InitialValues => {
-  let preference: ThemePreference = DEFAULT_THEME_PREFERENCE;
-  let color: string = DEFAULT_PRIMARY_COLOR;
-  let cachedThemeString: string | null = null;
-
-  if (typeof window !== "undefined") {
-    try {
-      const storedPreference = localStorage.getItem(
-        LOCAL_STORAGE_THEME_PREFERENCE_KEY
-      );
-      if (
-        storedPreference === "light" ||
-        storedPreference === "dark" ||
-        storedPreference === "system"
-      ) {
-        preference = storedPreference;
-      }
-      const storedColor = localStorage.getItem(LOCAL_STORAGE_PRIMARY_COLOR_KEY);
-      if (storedColor) {
-        color = storedColor;
-      }
-      cachedThemeString = localStorage.getItem(LOCAL_STORAGE_CACHED_THEME_KEY);
-    } catch (error) {
-      console.error(
-        "Failed to read initial theme values from localStorage:",
-        error
-      );
-      cachedThemeString = null;
-    }
-  }
-  return { preference, color, cachedThemeString };
-};
-
-const persistThemeData = (theme: Theme, preference: ThemePreference) => {
-  if (typeof window !== "undefined") {
-    try {
-      const primaryColor = theme.colorBrandBackground || DEFAULT_PRIMARY_COLOR;
-      localStorage.setItem(
-        LOCAL_STORAGE_CACHED_THEME_KEY,
-        JSON.stringify(theme)
-      );
-      localStorage.setItem(LOCAL_STORAGE_THEME_PREFERENCE_KEY, preference);
-      localStorage.setItem(LOCAL_STORAGE_PRIMARY_COLOR_KEY, primaryColor);
-    } catch (error) {
-      console.error(`Failed to write theme data to localStorage:`, error);
-    }
-  }
-};
 
 export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
@@ -84,7 +29,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
   const [themePreference, setThemePreferenceState] =
     React.useState<ThemePreference>(initialValues.preference);
   const [primaryColor, setPrimaryColorState] = React.useState<string>(
-    initialValues.color
+    initialValues.color,
   );
 
   const appliedThemeMode = React.useMemo((): ThemeMode => {
@@ -146,7 +91,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
     (preference: ThemePreference) => {
       setThemePreferenceState(preference);
     },
-    []
+    [],
   );
 
   const setPrimaryColor = React.useCallback((color: string) => {
@@ -169,7 +114,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
       setThemePreference,
       primaryColor,
       setPrimaryColor,
-    ]
+    ],
   );
 
   React.useEffect(() => {
@@ -182,7 +127,7 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
         themeMetaTag.setAttribute("content", theme.colorNeutralBackground1);
       }
     }
-  }, [theme, themePreference]); // Persist when theme object or user preference changes
+  }, [theme, themePreference]);
 
   return (
     <ThemeContext.Provider value={contextValue}>
@@ -194,7 +139,6 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({
 export const useTheme = (): ThemeContextProps => {
   const context = React.useContext(ThemeContext);
   if (!context) {
-    // Hook must be used within the provider
     throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;

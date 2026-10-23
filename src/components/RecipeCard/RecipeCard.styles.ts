@@ -1,10 +1,12 @@
 import { tokens } from "@fluentui/react-components";
 import { makeStyles, shorthands } from "@griffel/react";
 
+import { sizing } from "../theme/sizingTokens";
+
 export const useRecipeCardStyles = makeStyles({
   card: {
     width: "100%",
-    height: "280px",
+    height: sizing.recipeCard,
     display: "flex",
     flexDirection: "column",
     transition: "all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)",

@@ -1,5 +1,7 @@
 import { makeStyles, shorthands, tokens } from "@fluentui/react-components";
 
+import { sizing } from "../../theme/sizingTokens";
+
 export const useMobileDrawerStyles = makeStyles({
   mobileMenu: {
     backgroundColor: tokens.colorNeutralBackground1,
@@ -23,7 +25,7 @@ export const useMobileDrawerStyles = makeStyles({
     ...shorthands.padding(
       tokens.spacingVerticalXXL,
       tokens.spacingHorizontalL,
-      tokens.spacingVerticalL
+      tokens.spacingVerticalL,
     ),
     gap: tokens.spacingVerticalL,
   },
@@ -75,7 +77,7 @@ export const useMobileDrawerStyles = makeStyles({
       top: "50%",
       transform: "translateY(-50%)",
       width: "3px",
-      height: "24px",
+      height: sizing.navigationIndicator,
       backgroundColor: tokens.colorCompoundBrandStroke,
       borderTopRightRadius: tokens.borderRadiusMedium,
       borderBottomRightRadius: tokens.borderRadiusMedium,
@@ -96,7 +98,7 @@ export const useMobileDrawerStyles = makeStyles({
     gap: tokens.spacingHorizontalS,
     fontWeight: tokens.fontWeightSemibold,
     fontSize: tokens.fontSizeBase300,
-    minHeight: "44px",
+    minHeight: sizing.touchTarget,
     width: "100%",
     textWrap: "nowrap",
     ...shorthands.padding("0", tokens.spacingHorizontalL),

@@ -6,6 +6,10 @@ The user authorized merging all recent agent fixes into main, including work
 previously delivered to master and the separate tag-editor branch. Starting main:
 f394b1d. Master delivery: 5d895a4. Tag-editor delivery: 32a6e0e.
 The working tree was clean before integration. All original branches are retained.
+Repository: czearing/book-cook, in the dedicated book-cook working directory.
+Guidance: CLAUDE.md, the supplied software-engineer specification and its Software
+Change Record template. Runtime: Node 24.15.0, Next 15.3.6, React 19, Lexical
+0.40.0; Yarn 4.9.2 for Berry dependency resolution.
 
 ## Acceptance Contract
 
@@ -109,16 +113,16 @@ changed source, avoiding unrelated formatting edits.
 Master adaptation passes its unit, browser and production-build gates. The
 tag branch merged without conflicts. Final combined results:
 
-| Command | Result |
-| --- | --- |
-| `yarn jest --runInBand --silent` | 42 suites and 345 tests passed; existing one-suite/one-test skip |
-| `yarn playwright test e2e recipe-tags --workers=1` | All 9 browser tests passed |
-| `yarn build` | Passed, including production compilation and page generation |
-| `node node_modules\eslint\bin\eslint.js --max-warnings=0 <changed TS/TSX files>` | Passed |
-| `node node_modules\prettier\bin\prettier.cjs --check <changed source files>` | Passed |
-| `yarn tsc --noEmit --pretty false` | 93 pre-existing diagnostics, exactly matching untouched main |
-| `yarn lint --no-cache` | Failed on 11 pre-existing warnings in unchanged files |
-| `git diff --check` and staged equivalent | Passed |
+| Command                                                                          | Result                                                           |
+| -------------------------------------------------------------------------------- | ---------------------------------------------------------------- |
+| `yarn jest --runInBand --silent`                                                 | 42 suites and 345 tests passed; existing one-suite/one-test skip |
+| `yarn playwright test e2e recipe-tags --workers=1`                               | All 9 browser tests passed                                       |
+| `yarn build`                                                                     | Passed, including production compilation and page generation     |
+| `node node_modules\eslint\bin\eslint.js --max-warnings=0 <changed TS/TSX files>` | Passed                                                           |
+| `node node_modules\prettier\bin\prettier.cjs --check <changed source files>`     | Passed                                                           |
+| `yarn tsc --noEmit --pretty false`                                               | 93 pre-existing diagnostics, exactly matching untouched main     |
+| `yarn lint --no-cache`                                                           | Failed on 11 pre-existing warnings in unchanged files            |
+| `git diff --check` and staged equivalent                                         | Passed                                                           |
 
 The tag tests exercise blur collapse, pointer reopening, keyboard focus,
 Enter/comma addition, removal and the empty placeholder. No browser writes leave
@@ -132,13 +136,28 @@ ownership, disabled/focus behavior, accessible checkbox names, visible request
 errors, callback stability and timer cleanup. No current-main speed improvement
 or comprehensive security guarantee is asserted.
 
-Branch integration and scoped behavior gates are satisfied locally. Remote
-verification is pending below. Full-repository lint/type cleanliness remains a
+Accepted for requested branch integration and scoped behavior. The non-forced
+push and exact remote verification passed. Full-repository lint/type cleanliness
+remains a
 pre-existing limitation, not a passing gate; this is not an all-checks-green
 claim.
 
 ## Delivery
 
 Record: agent-records/2026-10-23-main-integration.md.
-Master merge: f403074. Tag history: 32a6e0e, merged with a separate two-parent
-commit on main. Pending non-forced push and exact remote SHA verification.
+Master merge: f403074. Tag merge: e5d6008, containing tag branch tip 32a6e0e.
+`git push origin main` succeeded without force. Immediately afterward both local
+HEAD and `git ls-remote --heads origin main` resolved to
+e5d6008798f905188d5f51830d43276870331be0. The working tree was clean.
+
+`git merge-base --is-ancestor <branch> HEAD` passed for origin/master,
+origin/fix/tag-editor-bottom-row, origin/fix/consistent-controls-20261022,
+fix/settings-dividers-20261023, fix/markdown-checkbox-20261022,
+fix/sidebar-hover-20261022, origin/perf/debounce-recipe-search,
+origin/perf/master-production-cost and perf/recipe-grid-8d42b3ae.
+All audited recent agent fixes are therefore present in remote main's history,
+not stranded on their original branches. No branches were deleted or reset.
+
+This final documentation update is delivered as a follow-up commit on main.
+Remaining limitations are the unchanged full-typecheck diagnostics, existing
+strict-lint warnings, and the unrun non-isolated legacy browser suite above.

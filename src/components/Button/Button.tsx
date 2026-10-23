@@ -3,12 +3,13 @@ import { clsx } from "clsx";
 
 import styles from "./Button.module.css";
 import type { ButtonProps } from "./Button.types";
+import appearances from "./ButtonAppearance.module.css";
 
 const variantStyles = {
-  primary: styles.variantPrimary,
-  secondary: styles.variantSecondary,
-  ghost: styles.variantGhost,
-  destructive: styles.variantDestructive,
+  primary: appearances.primary,
+  secondary: appearances.secondary,
+  ghost: appearances.subtle,
+  destructive: appearances.destructive,
 };
 
 const sizeStyles = {
@@ -50,7 +51,8 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 
     const startIcon = icon ?? startIconProp;
     const isDisabled = Boolean(disabled) || isLoading;
-    const resolvedType = type ?? (Component === "button" ? "button" : undefined);
+    const resolvedType =
+      type ?? (Component === "button" ? "button" : undefined);
 
     return (
       <Component
@@ -59,14 +61,13 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         disabled={isDisabled}
         className={clsx(
           styles.button,
-          styles[appearance],
-          variant && variantStyles[variant],
+          variant ? variantStyles[variant] : appearances[appearance],
           sizeStyles[size],
           shapeStyles[shape],
           fullWidth && styles.fullWidth,
           isDisabled && styles.disabled,
           isLoading && styles.loading,
-          className
+          className,
         )}
         {...rest}
       >
@@ -79,7 +80,7 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {!isLoading && endIcon}
       </Component>
     );
-  }
+  },
 );
 
 Button.displayName = "Button";

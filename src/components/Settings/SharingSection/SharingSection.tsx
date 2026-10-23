@@ -1,150 +1,128 @@
-import * as React from "react";
-import { UserPlusIcon, UserMinusIcon } from "@phosphor-icons/react";
-import { toast } from "sonner";
+import { useState } from "react";
+import { UsersIcon } from "@phosphor-icons/react";
 
-import styles from "./SharingSection.module.css";
-import { sharingSectionId } from "../constants";
-import { useSettingsSection } from "../context";
-import { SettingsSection, SettingItem } from "../SettingShared";
+import { Section, SettingItem } from "../FlatSection";
+import styles from "../Settings.module.css";
 
-import {
-  useDeleteSharedUser,
-  useShareWithUser,
-  useSharedUsers,
-} from "../../../clientToServer";
+import { useDeleteSharedUser } from "../../../clientToServer/delete/useDeleteSharedUser";
+import { useSharedUsers } from "../../../clientToServer/fetch/useSharedUsers";
+import { useShareWithUser } from "../../../clientToServer/post/useShareWithUser";
 import { Avatar } from "../../Avatar";
-import { Button } from "../../Button";
-import { Input } from "../../Input";
-import { Spinner } from "../../Spinner";
-import { Text } from "../../Text";
 
-// Define search keywords for each section
-const sectionKeywords = ["sharing", "share", "collaborate", "access"];
-const shareUserKeywords = [
-  "share with user",
-  "share with another user",
-  "add user",
-  "invite",
-  "email",
-  "collaborate",
-];
+const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-export const SharingSection: React.FC = () => {
-  const [shareEmail, setShareEmail] = React.useState("");
+export function SharingSection() {
+  const [shareEmail, setShareEmail] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [shareError, setShareError] = useState("");
+  const { data: sharedUsers = [], isLoading: isLoadingUsers } =
+    useSharedUsers();
+  const { mutate: addUser, isPending: isAdding } = useShareWithUser();
+  const { mutate: removeUser, isPending: isRemoving } = useDeleteSharedUser();
 
-  const { data: sharedUsers = [], isLoading } = useSharedUsers();
-  const shareRecipeMutation = useShareWithUser();
-  const removeAccessMutation = useDeleteSharedUser();
-
-  const { isVisible, searchTerm } = useSettingsSection(sharingSectionId, [
-    ...sectionKeywords,
-    ...shareUserKeywords,
-  ]);
-
-  const sectionMatches =
-    !searchTerm || sectionKeywords.some((k) => k.includes(searchTerm));
-  const shareUserItemMatches =
-    !searchTerm || shareUserKeywords.some((k) => k.includes(searchTerm));
-
-  const handleShareRecipeBook = async () => {
-    if (!shareEmail) {return;}
-
-    try {
-      await shareRecipeMutation.mutateAsync(shareEmail);
-      toast.success("Book cook shared successfully!");
-      setShareEmail("");
-    } catch (error) {
-      toast.error(
-        error instanceof Error
-          ? error.message
-          : "Failed to share your book cook"
-      );
-    }
-  };
-
-  const handleRemoveAccess = async (email: string) => {
-    if (!confirm(`Remove access for ${email}?`)) {
+  const handleShare = () => {
+    setEmailError("");
+    setShareError("");
+    if (!shareEmail || isAdding) {
       return;
     }
-
-    try {
-      await removeAccessMutation.mutateAsync(email);
-      toast.success(`Access for ${email} has been removed.`);
-    } catch (error) {
-      toast.error(
-        error instanceof Error ? error.message : "Failed to remove access"
-      );
+    if (!EMAIL_RE.test(shareEmail)) {
+      setEmailError("Enter a valid email address.");
+      return;
     }
+    addUser(shareEmail, {
+      onSuccess: () => setShareEmail(""),
+      onError: (error) =>
+        setShareError(
+          error instanceof Error
+            ? error.message
+            : "Failed to share. Please try again.",
+        ),
+    });
   };
 
-  const isSharing =
-    shareRecipeMutation.isPending || removeAccessMutation.isPending;
-
-  // Return null if searching and this section doesn't match
-  if (searchTerm && !isVisible) {
-    return null;
-  }
+  const handleRemove = (email: string) => {
+    removeUser(email, {
+      onError: (error) =>
+        setShareError(
+          error instanceof Error
+            ? error.message
+            : "Failed to remove access. Please try again.",
+        ),
+    });
+  };
 
   return (
-    <SettingsSection
-      title="Sharing"
-      itemValue={sharingSectionId}
-      icon={<UserPlusIcon />}
-    >
-      {(!searchTerm || shareUserItemMatches || sectionMatches) && (
-        <SettingItem
-          label="Share with Another User"
-          description="Enter an email address to share your recipe book with another user."
-          fullWidth
-        >
-          <div className={styles.shareContainer}>
-            <Input
-              value={shareEmail}
-              onChange={(e) => setShareEmail(e.target.value)}
-              placeholder="user@example.com"
-              type="email"
-              disabled={isSharing}
-              fullWidth
-            />
-            <Button
-              icon={<UserPlusIcon />}
-              onClick={handleShareRecipeBook}
-              disabled={!shareEmail || isSharing}
-            >
-              {isSharing ? <Spinner size="tiny" /> : "Share"}
-            </Button>
+    <Section value="sharing" title="Sharing" icon={<UsersIcon size={18} />}>
+      <SettingItem
+        label="Share with Another User"
+        description="Enter an email address to share your recipe book."
+        fullWidth
+      >
+        <div className={styles.shareRow}>
+          <input
+            aria-label="Share with Another User"
+            className={styles.shareInput}
+            type="email"
+            placeholder="user@example.com"
+            value={shareEmail}
+            onChange={(event) => {
+              setShareEmail(event.target.value);
+              setEmailError("");
+              setShareError("");
+            }}
+            onKeyDown={(event) => {
+              if (event.key === "Enter") {
+                handleShare();
+              }
+            }}
+            disabled={isAdding}
+            aria-invalid={Boolean(emailError)}
+          />
+          <button
+            className={styles.btn}
+            onClick={handleShare}
+            disabled={!shareEmail || isAdding}
+          >
+            {isAdding ? "Sharing…" : "Share"}
+          </button>
+        </div>
+        {emailError && (
+          <div role="alert" className={styles.errorText}>
+            {emailError}
           </div>
-          <div className={styles.usersList}>
-            {isLoading ? (
-              <Spinner size="tiny" />
-            ) : sharedUsers.length === 0 ? (
-              <div className={styles.emptyState}>
-                {`You haven't shared your recipes with anyone yet.`}
-              </div>
-            ) : (
-              sharedUsers.map((email) => (
-                <div key={email} className={styles.userItem}>
-                  <div className={styles.userInfo}>
-                    <Avatar
-                      name={email.split("@")[0]}
-                      size="sm"
-                    />
-                    <Text>{email}</Text>
-                  </div>
-                  <Button
-                    icon={<UserMinusIcon />}
-                    variant="ghost"
-                    size="sm"
-                    onClick={() => handleRemoveAccess(email)}
-                    aria-label={`Remove ${email}'s access`}
-                    disabled={isSharing}
-                  />
+        )}
+        {shareError && (
+          <div role="alert" className={styles.errorText}>
+            {shareError}
+          </div>
+        )}
+        <div className={styles.sharedUsersList}>
+          {isLoadingUsers ? (
+            <div className={styles.emptyState}>Loading…</div>
+          ) : sharedUsers.length === 0 ? (
+            <div className={styles.emptyState}>
+              {"You haven't shared your recipes with anyone yet."}
+            </div>
+          ) : (
+            sharedUsers.map((email) => (
+              <div key={email} className={styles.sharedUserItem}>
+                <div className={styles.sharedUserInfo}>
+                  <Avatar name={email.split("@")[0]} size="sm" />
+                  {email}
                 </div>
-              ))
-            )}
-          </div>
-        </SettingItem>
-      )}
-    </SettingsSection>
+                <button
+                  className={`${styles.btn} ${styles.btnDanger}`}
+                  onClick={() => handleRemove(email)}
+                  disabled={isRemoving}
+                >
+                  Remove
+                </button>
+              </div>
+            ))
+          )}
+        </div>
+      </SettingItem>
+    </Section>
   );
-};
+}

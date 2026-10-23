@@ -1,4 +1,5 @@
 import {
+  CHECK_LIST,
   HEADING,
   QUOTE,
   TEXT_FORMAT_TRANSFORMERS,
@@ -25,6 +26,9 @@ export const editorTheme = {
   },
   quote: typography.bodyText,
   list: {
+    checklist: styles.checklist,
+    listitemChecked: styles.checked,
+    listitemUnchecked: styles.unchecked,
     ol: styles.ol,
     ul: styles.ul,
     listitem: styles.listItem,
@@ -44,6 +48,7 @@ export const recipeTransformers = [
   HR_TRANSFORMER,
   HEADING,
   QUOTE,
+  CHECK_LIST,
   ORDERED_LIST,
   UNORDERED_LIST,
   ...TEXT_FORMAT_TRANSFORMERS,
@@ -53,6 +58,7 @@ export const recipeTransformers = [
 export const recipeShortcutTransformers = [
   HEADING,
   QUOTE,
+  CHECK_LIST,
   ORDERED_LIST,
   UNORDERED_LIST,
   ...TEXT_FORMAT_TRANSFORMERS,

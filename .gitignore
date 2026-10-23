@@ -99,3 +99,6 @@ storybook-static/
 
 package-manifest.json
 .claude/settings.local.json
+test-results/
+playwright-report/
+integration-*.log

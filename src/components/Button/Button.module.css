@@ -33,128 +33,6 @@
     0 0 0 4px var(--brand-Primary);
 }
 
-/* Variants */
-/* Appearance-based classes (FluentUI-compatible API) */
-.primary {
-  background-color: var(--brand-Primary);
-  color: #fff;
-  border-color: var(--brand-Primary);
-}
-.primary:hover:not(:disabled) {
-  background-color: var(--brand-Hover);
-  border-color: var(--brand-Hover);
-  transform: translateY(-1px);
-}
-.primary:active:not(:disabled) {
-  background-color: var(--brand-Pressed);
-  transform: translateY(1px);
-}
-
-.secondary {
-  background-color: transparent;
-  color: var(--ui-TextPrimary);
-  border-color: var(--ui-ControlBorder);
-}
-.secondary:hover:not(:disabled) {
-  border-color: var(--ui-ControlBorderHover);
-  background-color: transparent;
-  color: var(--ui-TextPrimary);
-}
-.secondary:active:not(:disabled) {
-  background-color: var(--ui-ControlPressed);
-}
-
-.outline {
-  background-color: transparent;
-  color: var(--brand-Primary);
-  border-color: var(--brand-Primary);
-}
-.outline:hover:not(:disabled) {
-  background-color: var(--brand-Primary);
-  color: #fff;
-}
-.outline:active:not(:disabled) {
-  background-color: var(--brand-Pressed);
-}
-
-.subtle {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--ui-TextSecondary);
-}
-.subtle:hover:not(:disabled) {
-  background-color: var(--ui-ControlHover);
-  color: var(--ui-TextPrimary);
-}
-.subtle:active:not(:disabled) {
-  background-color: var(--ui-ControlPressed);
-}
-
-.transparent {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--ui-TextSecondary);
-}
-.transparent:hover:not(:disabled) {
-  color: var(--ui-TextPrimary);
-}
-
-/* Legacy variant classes */
-.variantPrimary {
-  background-color: var(--brand-Primary);
-  color: #fff;
-  border-color: var(--brand-Primary);
-}
-.variantPrimary:hover:not(:disabled) {
-  background-color: var(--brand-Hover);
-  border-color: var(--brand-Hover);
-  transform: translateY(-1px);
-}
-.variantPrimary:active:not(:disabled) {
-  background-color: var(--brand-Pressed);
-  transform: translateY(1px);
-}
-
-.variantSecondary {
-  background-color: transparent;
-  color: var(--ui-TextPrimary);
-  border-color: var(--ui-ControlBorder);
-}
-.variantSecondary:hover:not(:disabled) {
-  border-color: var(--ui-ControlBorderHover);
-  background-color: transparent;
-  color: var(--ui-TextPrimary);
-}
-.variantSecondary:active:not(:disabled) {
-  background-color: var(--ui-ControlPressed);
-}
-
-.variantGhost {
-  background-color: transparent;
-  border-color: transparent;
-  color: var(--ui-TextSecondary);
-}
-.variantGhost:hover:not(:disabled) {
-  background-color: var(--ui-ControlHover);
-  color: var(--ui-TextPrimary);
-}
-.variantGhost:active:not(:disabled) {
-  background-color: var(--ui-ControlPressed);
-}
-
-.variantDestructive {
-  background-color: transparent;
-  color: var(--danger-Primary);
-}
-.variantDestructive:hover:not(:disabled) {
-  background-color: var(--danger-Hover);
-}
-.variantDestructive:focus-visible {
-  box-shadow:
-    0 0 0 2px var(--ui-Canvas),
-    0 0 0 4px var(--danger-Primary);
-}
-
 /* Sizes */
 .sizeXs {
   height: 24px;
@@ -219,18 +97,13 @@
   display: flex;
 }
 
-.disabled {
+.button.disabled {
   opacity: 0.5;
   cursor: not-allowed;
   pointer-events: none;
   color: var(--ui-ControlDisabled);
   border-color: var(--ui-ControlDisabled);
   background-color: var(--ui-ControlBackgroundDisabled);
-}
-
-.variantGhost.disabled {
-  border-color: transparent;
-  background-color: transparent;
 }
 
 .loading {

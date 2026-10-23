@@ -38,6 +38,12 @@ yarn install
 yarn dev
 ```
 
+## Recipe checkboxes
+
+Type `[] `, `[ ] `, or `- [ ] ` at the start of a line to create a checkbox.
+Click the checkbox or focus it and press Space to toggle it. Checked states are
+saved as Markdown and restored when the recipe is reopened.
+
 ## 📦 Bundle Analysis
 
 To inspect the client bundle and identify large dependencies, run:

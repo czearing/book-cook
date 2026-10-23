@@ -1,3 +1,4 @@
+import { memo } from "react";
 import { clsx } from "clsx";
 import Image from "next/image";
 import { useRouter } from "next/router";
@@ -23,13 +24,13 @@ const SkeletonContent = () => (
   </>
 );
 
-export const RecipeCard = ({
+export const RecipeCard = memo(function RecipeCard({
   recipe,
   onClick,
   className,
   showMeta = true,
   isLoading = false,
-}: RecipeCardProps) => {
+}: RecipeCardProps) {
   const router = useRouter();
 
   if (isLoading) {
@@ -88,7 +89,10 @@ export const RecipeCard = ({
         {isNew && <span className={styles.newBadge}>NEW</span>}
       </div>
       <div className={styles.body}>
-        <BodyText as="h3" className={clsx(styles.title, !recipe.title && styles.untitled)}>
+        <BodyText
+          as="h3"
+          className={clsx(styles.title, !recipe.title && styles.untitled)}
+        >
           {recipe.title || "Untitled Recipe"}
         </BodyText>
         {showMeta && creatorName ? (
@@ -130,4 +134,4 @@ export const RecipeCard = ({
       {content}
     </button>
   );
-};
+});

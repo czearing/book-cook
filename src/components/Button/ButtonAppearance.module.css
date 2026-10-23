@@ -1,0 +1,92 @@
+.primary {
+  background-color: var(--brand-Primary);
+  color: #fff;
+  border-color: var(--brand-Primary);
+}
+
+.primary:hover:not(:disabled) {
+  background-color: var(--brand-Hover);
+  border-color: var(--brand-Hover);
+  transform: translateY(-1px);
+}
+
+.primary:active:not(:disabled) {
+  background-color: var(--brand-Pressed);
+  transform: translateY(1px);
+}
+
+.secondary {
+  background-color: var(--ui-Canvas);
+  color: var(--ui-TextPrimary);
+  border-color: var(--ui-ControlBorder);
+}
+
+.secondary:hover:not(:disabled) {
+  border-color: var(--ui-ControlBorderHover);
+  background-color: var(--ui-ControlHover);
+}
+
+.secondary:active:not(:disabled) {
+  border-color: var(--ui-ControlBorderPressed);
+  background-color: var(--ui-ControlPressed);
+}
+
+.outline {
+  background-color: transparent;
+  color: var(--brand-Primary);
+  border-color: var(--brand-Primary);
+}
+
+.outline:hover:not(:disabled) {
+  background-color: var(--brand-Primary);
+  color: #fff;
+}
+
+.outline:active:not(:disabled) {
+  background-color: var(--brand-Pressed);
+}
+
+.subtle {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--ui-TextSecondary);
+}
+
+.subtle:hover:not(:disabled) {
+  background-color: var(--ui-ControlHover);
+  color: var(--ui-TextPrimary);
+}
+
+.subtle:active:not(:disabled) {
+  background-color: var(--ui-ControlPressed);
+}
+
+.transparent {
+  background-color: transparent;
+  border-color: transparent;
+  color: var(--ui-TextSecondary);
+}
+
+.transparent:hover:not(:disabled) {
+  color: var(--ui-TextPrimary);
+}
+
+.destructive {
+  background-color: transparent;
+  color: var(--danger-Primary);
+}
+
+.destructive:hover:not(:disabled) {
+  background-color: var(--danger-Hover);
+}
+
+.destructive:focus-visible {
+  box-shadow:
+    0 0 0 2px var(--ui-Canvas),
+    0 0 0 4px var(--danger-Primary);
+}
+
+.subtle:disabled {
+  border-color: transparent;
+  background-color: transparent;
+}

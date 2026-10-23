@@ -22,7 +22,7 @@
   border: 1px solid var(--ui-ControlBorder);
   background: var(--ui-Canvas);
   color: var(--ui-TextPrimary);
-  border-radius: 10px;
+  border-radius: 8px;
   padding: 0 12px;
   transition:
     background-color var(--motion-default),
@@ -121,7 +121,7 @@
 }
 
 .sizeSm {
-  min-height: 32px;
+  min-height: 28px;
   padding: 0 10px;
   border-radius: 8px;
 }
@@ -131,7 +131,7 @@
 }
 
 .sizeMd {
-  min-height: 40px;
+  min-height: 36px;
   padding: 0 12px;
 }
 

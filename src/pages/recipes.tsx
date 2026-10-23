@@ -4,9 +4,7 @@ import { useSession } from "next-auth/react";
 
 import { fetchRecipesPaginated } from "src/clientToServer/fetch/fetchAllRecipes";
 import styles from "./recipes.module.css";
-import {
-  Unauthorized,
-} from "../components";
+import { Unauthorized } from "../components";
 import {
   Dropdown,
   DropdownTrigger,
@@ -19,37 +17,40 @@ import { MultiSelectMenu } from "../components/MultiSelectMenu";
 import { PageTitle, BodyText } from "../components/Typography";
 import { VirtualizedRecipeList } from "../components/VirtualizedRecipeList/VirtualizedRecipeList";
 import { useSearchBox } from "../context";
+import { useDebounce } from "../hooks/useDebounce";
 
 const PAGE_SIZE = 20;
 
 export default function Recipes() {
   const { searchBoxValue } = useSearchBox();
+  const settledSearch = useDebounce(searchBoxValue, 300);
   const { data: session, status } = useSession();
 
   const [sortOption, setSortOption] = React.useState("dateNewest");
   const [selectedTags, setSelectedTags] = React.useState<string[]>([]);
   const [currentPage, setCurrentPage] = React.useState(1);
 
-  // Reset to page 1 whenever search/sort/tags change
+  // Use page one immediately for a new filter, before the reset effect runs.
+  const filterKey = JSON.stringify([settledSearch, sortOption, selectedTags]);
+  const previousFilters = React.useRef(filterKey);
+  const page = previousFilters.current === filterKey ? currentPage : 1;
   React.useEffect(() => {
+    previousFilters.current = filterKey;
     setCurrentPage(1);
-  }, [searchBoxValue, sortOption, selectedTags]);
+  }, [filterKey]);
 
-  const offset = (currentPage - 1) * PAGE_SIZE;
+  const offset = (page - 1) * PAGE_SIZE;
 
-  const {
-    data,
-    isLoading,
-    error,
-  } = useQuery({
-    queryKey: ["recipes", searchBoxValue, sortOption, selectedTags, currentPage],
-    queryFn: () => fetchRecipesPaginated({
-      searchBoxValue,
-      orderBy: sortOption,
-      selectedTags,
-      offset,
-      limit: PAGE_SIZE,
-    }),
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["recipes", settledSearch, sortOption, selectedTags, page],
+    queryFn: () =>
+      fetchRecipesPaginated({
+        searchBoxValue: settledSearch,
+        orderBy: sortOption,
+        selectedTags,
+        offset,
+        limit: PAGE_SIZE,
+      }),
     staleTime: 5 * 60 * 1000,
     gcTime: 30 * 60 * 1000,
     refetchOnMount: true,
@@ -58,7 +59,9 @@ export default function Recipes() {
   const recipes = data?.recipes ?? [];
   const totalCount = data?.totalCount ?? 0;
 
-  const availableTags = Array.from(new Set(recipes.flatMap((r) => r.tags ?? [])));
+  const availableTags = Array.from(
+    new Set(recipes.flatMap((r) => r.tags ?? [])),
+  );
 
   if (status === "loading") {
     return null;
@@ -86,10 +89,16 @@ export default function Recipes() {
               <DropdownCaret />
             </DropdownTrigger>
             <DropdownContent>
-              <DropdownItem value="dateNewest">Sort by date (newest)</DropdownItem>
-              <DropdownItem value="dateOldest">Sort by date (oldest)</DropdownItem>
+              <DropdownItem value="dateNewest">
+                Sort by date (newest)
+              </DropdownItem>
+              <DropdownItem value="dateOldest">
+                Sort by date (oldest)
+              </DropdownItem>
               <DropdownItem value="ascTitle">Sort by title (asc)</DropdownItem>
-              <DropdownItem value="descTitle">Sort by title (desc)</DropdownItem>
+              <DropdownItem value="descTitle">
+                Sort by title (desc)
+              </DropdownItem>
             </DropdownContent>
           </Dropdown>
           <MultiSelectMenu
@@ -103,7 +112,7 @@ export default function Recipes() {
       <VirtualizedRecipeList
         recipes={recipes}
         totalCount={totalCount}
-        currentPage={currentPage}
+        currentPage={page}
         pageSize={PAGE_SIZE}
         isLoading={isLoading}
         error={error}

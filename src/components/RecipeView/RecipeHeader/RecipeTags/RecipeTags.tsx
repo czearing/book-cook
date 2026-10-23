@@ -1,5 +1,6 @@
 import { useRef, useState } from "react";
 import { XIcon } from "@phosphor-icons/react";
+import { clsx } from "clsx";
 
 import styles from "./RecipeTags.module.css";
 import type { RecipeTagsProps } from "./RecipeTags.types";
@@ -11,22 +12,24 @@ export const RecipeTags = ({
   onTagClick,
   editable,
   onTagsChange,
-}: RecipeTagsProps) => {
+}: RecipeTagsProps): React.JSX.Element => {
   const [inputValue, setInputValue] = useState("");
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const addTag = (raw: string) => {
+  const addTag = (raw: string): void => {
     const tag = raw.trim().toLowerCase();
-    if (!tag || tags.includes(tag)) {return;}
+    if (!tag || tags.includes(tag)) {
+      return;
+    }
     onTagsChange?.([...tags, tag]);
     setInputValue("");
   };
 
-  const removeTag = (tag: string) => {
+  const removeTag = (tag: string): void => {
     onTagsChange?.(tags.filter((t) => t !== tag));
   };
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>): void => {
     if (e.key === "Enter" || e.key === ",") {
       e.preventDefault();
       addTag(inputValue);
@@ -39,7 +42,10 @@ export const RecipeTags = ({
     return (
       <div className={styles.tagList}>
         {tags.map((tag) => (
-          <Tag key={tag} onClick={onTagClick ? () => onTagClick(tag) : undefined}>
+          <Tag
+            key={tag}
+            onClick={onTagClick ? () => onTagClick(tag) : undefined}
+          >
             {tag}
           </Tag>
         ))}
@@ -55,7 +61,10 @@ export const RecipeTags = ({
           <button
             type="button"
             className={styles.removeBtn}
-            onClick={(e) => { e.stopPropagation(); removeTag(tag); }}
+            onClick={(e) => {
+              e.stopPropagation();
+              removeTag(tag);
+            }}
             aria-label={`Remove tag ${tag}`}
           >
             <XIcon size={10} weight="bold" />
@@ -64,11 +73,19 @@ export const RecipeTags = ({
       ))}
       <input
         ref={inputRef}
-        className={styles.tagInput}
+        className={clsx(
+          styles.tagInput,
+          tags.length > 0 && styles.collapsibleInput,
+        )}
+        aria-label="Add tags"
         value={inputValue}
         onChange={(e) => setInputValue(e.target.value)}
         onKeyDown={handleKeyDown}
-        onBlur={() => { if (inputValue) {addTag(inputValue);} }}
+        onBlur={() => {
+          if (inputValue) {
+            addTag(inputValue);
+          }
+        }}
         placeholder={tags.length === 0 ? "Add tags…" : ""}
         size={Math.max(inputValue.length + 1, tags.length === 0 ? 10 : 2)}
       />

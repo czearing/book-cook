@@ -1,9 +1,9 @@
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { act, fireEvent, render, screen } from "@testing-library/react";
 
-import Recipes from "../pages/recipes";
 import { fetchRecipesPaginated } from "../clientToServer/fetch/fetchAllRecipes";
 import { useSearchBox } from "../context";
+import Recipes from "../pages/recipes";
 
 jest.mock("next-auth/react", () => ({
   useSession: () => ({

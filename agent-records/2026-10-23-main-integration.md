@@ -45,6 +45,18 @@ the newer application. Recovery is a normal revert of integration commits.
    physical lines; extract only meaningful reused boundaries when necessary.
 3. Merge tag-editor fix, validate combined behavior, commit and push main.
 
+File responsibilities and size estimates: editor integration and transformers
+about 140 and 100 lines; Settings composition about 40 lines with cohesive
+account, preferences and sharing modules each below 150; control appearance
+ownership below 100 lines; paginated search below 150; browser fixtures and
+individual regression files below 150. Final changed application, unit-test and
+browser source files are all below 200 physical lines. Imported historical
+performance evidence and its original scripts are retained without rewriting.
+
+Excluded older March/April experimental feature branches. The recent branch
+audit covers the October agent fixes, including master-contained local settings,
+controls, checkbox, sidebar, search and grid branches, plus the tag branch.
+
 ## Regression and Behavior Evidence
 
 Before the tag merge, `yarn jest --runInBand --silent` passed 41 suites and
@@ -95,10 +107,38 @@ changed source, avoiding unrelated formatting edits.
 ## Acceptance Decision
 
 Master adaptation passes its unit, browser and production-build gates. The
-separate tag merge and final remote verification are pending. Full-repository
-lint/type cleanliness remains a pre-existing limitation, not a passing gate.
+tag branch merged without conflicts. Final combined results:
+
+| Command | Result |
+| --- | --- |
+| `yarn jest --runInBand --silent` | 42 suites and 345 tests passed; existing one-suite/one-test skip |
+| `yarn playwright test e2e recipe-tags --workers=1` | All 9 browser tests passed |
+| `yarn build` | Passed, including production compilation and page generation |
+| `node node_modules\eslint\bin\eslint.js --max-warnings=0 <changed TS/TSX files>` | Passed |
+| `node node_modules\prettier\bin\prettier.cjs --check <changed source files>` | Passed |
+| `yarn tsc --noEmit --pretty false` | 93 pre-existing diagnostics, exactly matching untouched main |
+| `yarn lint --no-cache` | Failed on 11 pre-existing warnings in unchanged files |
+| `git diff --check` and staged equivalent | Passed |
+
+The tag tests exercise blur collapse, pointer reopening, keyboard focus,
+Enter/comma addition, removal and the empty placeholder. No browser writes leave
+the mocked fixture. The broader pre-existing tests/ui.spec.ts was not run:
+its recipe fixture returns the obsolete array response and its API mock lets
+non-GET requests through. It is not evidence of isolated verification for this
+integration. No retries or fixed sleeps were added to the new regressions.
+
+Code review covered architecture preservation, shared transformer/appearance
+ownership, disabled/focus behavior, accessible checkbox names, visible request
+errors, callback stability and timer cleanup. No current-main speed improvement
+or comprehensive security guarantee is asserted.
+
+Branch integration and scoped behavior gates are satisfied locally. Remote
+verification is pending below. Full-repository lint/type cleanliness remains a
+pre-existing limitation, not a passing gate; this is not an all-checks-green
+claim.
 
 ## Delivery
 
 Record: agent-records/2026-10-23-main-integration.md.
-Pending verification and non-forced push to main.
+Master merge: f403074. Tag history: 32a6e0e, merged with a separate two-parent
+commit on main. Pending non-forced push and exact remote SHA verification.

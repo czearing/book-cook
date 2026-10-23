@@ -5,6 +5,7 @@
 }
 
 .tagEditor {
+  position: relative;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -38,7 +39,9 @@
   border-radius: 50%;
   width: 14px;
   height: 14px;
-  transition: background 0.1s ease, color 0.1s ease;
+  transition:
+    background 0.1s ease,
+    color 0.1s ease;
 }
 
 .removeBtn:hover {
@@ -59,4 +62,11 @@
 
 .tagInput::placeholder {
   color: var(--ui-TextCaption);
+}
+
+.collapsibleInput:not(:focus) {
+  position: absolute;
+  width: 0;
+  min-width: 0;
+  padding: 0;
 }

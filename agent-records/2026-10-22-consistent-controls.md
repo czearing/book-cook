@@ -19,7 +19,7 @@ The user authorizes integration to `master`; remote master exists at the startin
 6. Every touched hand-written code file remains below 200 physical lines. No legacy exception is assumed.
 7. Applicable Jest, browser, formatting, lint, TypeScript, and production-build checks pass before integration. Save this completed record and merge only task changes to master.
 
-Commands: `yarn test --runInBand`, `yarn playwright test control-styling form-surfaces`, `node node_modules\prettier\bin\prettier.cjs --check --end-of-line auto --print-width 80 --single-quote false <changed-files>`, `node node_modules\eslint\bin\eslint.js --max-warnings 0 <changed-code-files>`, `yarn lint`, `yarn tsc --noEmit --incremental false`, `yarn build`, `git diff --cached --check`.
+Commands: `yarn test --runInBand`, `yarn playwright test control-styling form-surfaces`, `node node_modules\prettier\bin\prettier.cjs --check --end-of-line auto --print-width 80 --single-quote false @files`, `node node_modules\eslint\bin\eslint.js --max-warnings 0 @files`, `yarn lint`, `yarn tsc --noEmit --incremental false`, `yarn build`, `git diff --cached --check`. The changed-file selection is recorded with the results below.
 
 ## Discovery and Baseline
 
@@ -77,9 +77,14 @@ Scoped formatting and import ordering have been applied. All task-touched code f
 
 ## Acceptance Decision
 
-Acceptance criteria 1 through 6 have evidence. All local verification gates in criterion 7 passed in the task-only tree. The remaining gate is verifying the merge into remote master.
+Accepted. All seven acceptance criteria have evidence. The task-only tree passed the required local checks, and pull request #6 is merged into remote master. The merge tree is identical to the verified implementation commit. Unavailable browser engines, CI Node 22, existing build warnings, and the unrelated dirty-tree type failure remain explicitly documented limitations, not concealed check results.
 
 ## Delivery
 
 Completed implementation record: `agent-records/2026-10-22-consistent-controls.md`.
-Branch: `fix/consistent-controls-20261022`. Integration pending. Existing unrelated work remains unstaged and intact.
+Branch: `fix/consistent-controls-20261022`.
+Implementation commit: `d83b3cf573863478856e3d5078e72f331c4c6adb`.
+Merged pull request: [#6](https://github.com/czearing/book-cook/pull/6), merged on 2026-10-23 at 04:22:42 UTC.
+Remote master merge commit: `5d9d208ff038f50370f71624235f22694f99ef40`.
+GitHub reported no checks for this branch; the repository workflow targets main rather than master. Local task-only verification supplied the required evidence before merging.
+This documentation-only completion update records the observed merge without changing verified code. Existing unrelated work remains unstaged and intact.

@@ -4,6 +4,7 @@ import {
   Spinner,
   Accordion,
   SearchBox,
+  accordionItemClassNames,
 } from "@fluentui/react-components";
 import type { AccordionToggleEventHandler } from "@fluentui/react-components";
 import { makeStyles, shorthands } from "@griffel/react";
@@ -35,14 +36,21 @@ const useStyles = makeStyles({
     color: tokens.colorNeutralForeground3,
     margin: "4px 0 0 0",
   },
-  card: {
+  content: {
     ...shorthands.padding("24px"),
-    ...shorthands.borderRadius("12px"),
-    backgroundColor: tokens.colorNeutralBackground1,
-    boxShadow: tokens.shadow8,
     display: "flex",
     flexDirection: "column",
     gap: "24px",
+  },
+  sections: {
+    [`& > .${accordionItemClassNames.root} ~ .${accordionItemClassNames.root}`]:
+      {
+        ...shorthands.borderTop(
+          tokens.strokeWidthThin,
+          "solid",
+          tokens.colorNeutralStroke2,
+        ),
+      },
   },
   noResults: {
     color: tokens.colorNeutralForeground3,
@@ -57,13 +65,13 @@ export const SettingsPage = () => {
   const { data: session, status } = useSession();
   const [searchTerm, setSearchTerm] = React.useState("");
   const [visibleSectionIds, setVisibleSectionIds] = React.useState<Set<string>>(
-    new Set()
+    new Set(),
   );
   const [openItems, setOpenItems] = React.useState<string[]>([]); // Add state for open accordion items
 
   const handleSearchChange = (
     _event: React.FormEvent<HTMLElement>,
-    data: { value: string }
+    data: { value: string },
   ) => {
     setSearchTerm(data.value.toLowerCase());
   };
@@ -82,7 +90,7 @@ export const SettingsPage = () => {
         });
       },
     }),
-    [searchTerm]
+    [searchTerm],
   );
 
   const handleToggle: AccordionToggleEventHandler<string> = (_event, data) => {
@@ -107,7 +115,7 @@ export const SettingsPage = () => {
 
   return (
     <div className={styles.page}>
-      <div className={styles.card}>
+      <div className={styles.content}>
         <div>
           <h1 className={styles.title}>Settings</h1>
           <p className={styles.subtitle}>
@@ -121,6 +129,7 @@ export const SettingsPage = () => {
         />
         <SettingsSearchContext.Provider value={settingsContextValue}>
           <Accordion
+            className={styles.sections}
             collapsible
             openItems={openItems}
             defaultOpenItems={searchTerm ? sectionIds : []}

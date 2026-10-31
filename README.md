@@ -44,6 +44,22 @@ Type `[] `, `[ ] `, or `- [ ] ` at the start of a line to create a checkbox.
 Click the checkbox or focus it and press Space to toggle it. Checked states are
 saved as Markdown and restored when the recipe is reopened.
 
+## Recipe options and validation
+
+Use the three-dot Recipe options button in the recipe header to save or discard
+edits, or confirm deletion. Save failures retain the edits for retry.
+Tag entry collapses when unfocused without leaving an empty row.
+
+Jest runs unit tests in `src`; Playwright runs browser tests in `tests` separately.
+Run these commands for the integrated recipe flows:
+
+```powershell
+yarn test --runInBand
+yarn test:e2e e2e recipe-tags recipe-options recipe-header-alignment recipe-gallery-alignment --workers=1
+```
+
+Browser tests use intercepted API fixtures and do not require production data.
+
 ## 📦 Bundle Analysis
 
 To inspect the client bundle and identify large dependencies, run:

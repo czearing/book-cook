@@ -32,6 +32,13 @@
   margin: 12px 0 16px;
 }
 
+.actions {
+  position: absolute;
+  top: 0;
+  right: var(--header-right-padding);
+  z-index: 1;
+}
+
 .metaGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -70,7 +77,6 @@
   color: var(--ui-TextCaption);
   pointer-events: none;
 }
-
 
 .editorAligned {
   --header-left-padding: calc(

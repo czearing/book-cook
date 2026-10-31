@@ -14,7 +14,7 @@ export type Recipe = {
   creatorName?: string;
 };
 
-import type { MutableRefObject } from "react";
+import type { MutableRefObject, ReactNode } from "react";
 import type { LexicalEditor } from "lexical";
 
 export type RecipeViewProps = {
@@ -22,4 +22,5 @@ export type RecipeViewProps = {
   viewingMode?: "editor" | "viewer";
   onEdit?: () => void;
   editorRef?: MutableRefObject<LexicalEditor | null>;
+  actions?: ReactNode;
 };

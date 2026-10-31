@@ -6,4 +6,5 @@ export type RecipeHeaderProps = {
   onTagClick?: (tag: string) => void;
   onTagsChange?: (tags: string[]) => void;
   onEdit?: () => void;
+  actions?: RecipeViewProps["actions"];
 };

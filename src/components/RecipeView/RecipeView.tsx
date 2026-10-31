@@ -6,7 +6,9 @@ import { TextEditor } from "../TextEditor";
 
 /** Strip legacy HTML content so it doesn't render as raw tags in the editor. */
 function normalizeData(data: string): string {
-  if (!data?.includes("<")) {return data;}
+  if (!data?.includes("<")) {
+    return data;
+  }
   return data
     .replace(/<\/p>\s*<p>/gi, "\n\n")
     .replace(/<br\s*\/?>/gi, "\n")
@@ -19,12 +21,18 @@ export const RecipeView = ({
   viewingMode = "viewer",
   onEdit,
   editorRef,
+  actions,
 }: RecipeViewProps) => {
   const saveState = useRecipeViewSaveState();
 
   return (
     <section className={styles.container}>
-      <RecipeHeader recipe={recipe} viewingMode={viewingMode} onEdit={onEdit} />
+      <RecipeHeader
+        recipe={recipe}
+        viewingMode={viewingMode}
+        onEdit={onEdit}
+        actions={actions}
+      />
       <div className={styles.content}>
         <TextEditor
           text={normalizeData(recipe.data ?? "")}

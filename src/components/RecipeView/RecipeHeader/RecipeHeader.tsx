@@ -23,6 +23,7 @@ export const RecipeHeader = ({
   recipe,
   viewingMode,
   onTagClick,
+  actions,
 }: RecipeHeaderProps) => {
   const isEditable = viewingMode === "editor";
   const saveState = useRecipeViewSaveState();
@@ -41,7 +42,9 @@ export const RecipeHeader = ({
   const titleRef = useRef<HTMLHeadingElement>(null);
 
   useEffect(() => {
-    if (!isEditable || !titleRef.current) {return;}
+    if (!isEditable || !titleRef.current) {
+      return;
+    }
     if (titleRef.current.textContent !== recipe.title) {
       titleRef.current.textContent = recipe.title;
     }
@@ -52,7 +55,7 @@ export const RecipeHeader = ({
     if (isEditable && !recipe.title && titleRef.current) {
       titleRef.current.focus();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleEmojiChange = (emoji: string) => {
@@ -78,6 +81,7 @@ export const RecipeHeader = ({
         />
       ) : null}
       <div className={clsx(styles.main, isEditable && styles.editorAligned)}>
+        {actions && <div className={styles.actions}>{actions}</div>}
         <RecipeEmoji
           emoji={localEmoji}
           hasCover={Boolean(recipe.imageURL)}
@@ -129,7 +133,9 @@ export const RecipeHeader = ({
               <div>
                 {recipe.creatorName && (
                   <RecipePropertyRow icon={<UserIcon size={14} />} label="Chef">
-                    <span className={styles.linkText}>{recipe.creatorName}</span>
+                    <span className={styles.linkText}>
+                      {recipe.creatorName}
+                    </span>
                   </RecipePropertyRow>
                 )}
                 {showTags && (

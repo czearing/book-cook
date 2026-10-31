@@ -1,6 +1,6 @@
 .propertyRow {
   display: flex;
-  align-items: center;
+  align-items: baseline;
   min-height: 28px;
   padding: 4px 0;
   gap: 12px;
@@ -8,12 +8,13 @@
 
 .propertyLabel {
   display: inline-flex;
-  align-items: center;
+  align-items: baseline;
   gap: 8px;
   min-width: 120px;
 }
 
 .propertyIcon {
+  align-self: center;
   width: 16px;
   display: inline-flex;
   justify-content: center;

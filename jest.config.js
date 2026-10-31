@@ -29,7 +29,11 @@ const customJestConfig = {
     "^msw$": "<rootDir>/node_modules/msw/lib/core/index.js",
   },
   moduleDirectories: ["node_modules", "<rootDir>/"],
-  testPathIgnorePatterns: ["/node_modules/", "/.next/", "<rootDir>/tests/"],
+  testPathIgnorePatterns: [
+    "[/\\\\]node_modules[/\\\\]",
+    "[/\\\\]\\.next[/\\\\]",
+    "[/\\\\]tests[/\\\\]",
+  ],
 };
 
 const nextJestConfig = createJestConfig(customJestConfig);

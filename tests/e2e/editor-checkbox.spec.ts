@@ -27,7 +27,10 @@ test("checkbox shortcuts, keyboard toggles, continuation and save/reload preserv
     exact: true,
   });
   await expect(second).not.toBeChecked();
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Recipe options", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Save changes", exact: true }).click();
   await expect
     .poll(() => api.recipe.data)
     .toBe("- [x] Chop onions\n- [ ] Cook onions");
@@ -36,7 +39,10 @@ test("checkbox shortcuts, keyboard toggles, continuation and save/reload preserv
   await expect(second).not.toBeChecked();
   await second.click({ position: { x: 8, y: 12 } });
   await expect(second).toBeChecked();
-  await page.getByRole("button", { name: "Save", exact: true }).click();
+  await page
+    .getByRole("button", { name: "Recipe options", exact: true })
+    .click();
+  await page.getByRole("button", { name: "Save changes", exact: true }).click();
   await expect.poll(() => api.recipe.data).toContain("- [x] Cook onions");
 });
 

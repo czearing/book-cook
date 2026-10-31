@@ -108,3 +108,18 @@ Required integration result: blocked, not merged. The default branch is main, wh
 Recovery and next required decision: resolve the baseline check failures and establish an authorized integration strategy for the divergent master architecture before committing and merging. Do not bypass gates, overwrite unrelated work, or merge the main lineage wholesale.
 
 Job record: `agent-records\2026-10-22-recipe-options-dialog.md`. Remaining limitations: full repository validation, production build, and master integration are unmet; only Chromium with isolated API fixtures was exercised. This is a partial delivery, not completion.
+
+## Integration Follow-up: 2026-10-31
+
+The user authorized direct delivery of all pending local work to main/master.
+This supersedes the original local-only integration decision. Source commit
+`77b06df97e631a3a560e8fd4517ade6bfe78e700` was atomically pushed and verified
+as the exact tip of both remote branches. Options browser coverage passes,
+including retry, persistence, focus and an empty gallery after deletion.
+The fixture owns typed, isolated persistence/failure controls in
+`tests/recipe-options.fixture.ts`; assertions remain in the spec.
+The existing checkbox browser test now saves through Recipe options.
+All 24 combined Chromium tests, 353 unit tests and production build pass.
+Full TypeScript/strict lint retain 93 baseline diagnostics and 11 unchanged
+warnings, so repository-wide validation remains partial.
+Complete integration evidence: `agent-records/2026-10-31-complete-branch-delivery.md`.

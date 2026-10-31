@@ -135,7 +135,9 @@ validation remains partial because full TypeScript/strict lint fail on unchanged
 baseline issues. These failures are documented, not represented as passing gates.
 The latest user explicitly requires direct delivery of all pending work to both
 branches; integration will not be withheld solely on unrelated baseline failures.
-Criterion 5 awaits the non-forced remote push and exact verification below.
+Criterion 5 passes: the atomic push succeeded and both remote tips were verified
+at the exact source commit below. Branch delivery is accepted; overall
+repository-wide validation remains partial for the documented baseline issues.
 
 ## Delivery
 
@@ -145,5 +147,17 @@ remain unchanged. Only reviewed task files and directly coupled verification
 repairs are staged. Existing historical feature branches/open PRs are excluded.
 Both target branches are unprotected. Master is already an ancestor of main,
 so advancing both tips preserves all master/main history without conflicts.
-Next operation: non-forced atomic push of the verified commit to main/master,
-followed by exact remote-tip and ancestry checks and a delivery-evidence update.
+`git push --atomic origin HEAD:refs/heads/main HEAD:refs/heads/master` passed.
+Source commit: `77b06df97e631a3a560e8fd4517ade6bfe78e700`.
+`git ls-remote --heads origin main master` returned that exact SHA for both
+branches. The isolated worktree was clean after the source commit and push.
+Ancestry checks pass for starting main f997d83, starting master 5d895a4 and
+original tag fix 32a6e0e. Both destinations contain all reviewed pending local
+recipe changes and all previously merged main/master changes. No force push,
+branch deletion or overwrite of concurrent local files occurred.
+This evidence update accompanies superseding delivery notes in the four
+original task records and is pushed to both branches as a documentation commit.
+Job record: `agent-records/2026-10-31-complete-branch-delivery.md`.
+Remaining limitations: 93 unchanged full-typecheck diagnostics, 11 existing
+strict-lint warnings, existing build/peer warnings, Chromium-only browser
+coverage, and the unrun non-isolated legacy browser suite.

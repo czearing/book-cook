@@ -149,3 +149,16 @@ is used to preserve their branch, index, and working files without including the
 Remote commit verification is reported in the delivery response.
 No PR or merge is claimed. Repository-wide check failures and the original
 integration gate remain blocked, not waived by publishing the fix branch.
+
+## Integration Follow-up: 2026-10-31
+
+The original tag commit 32a6e0e was already merged into main through e5d6008.
+The user subsequently authorized direct delivery of all pending local work to
+main/master. Source commit `77b06df97e631a3a560e8fd4517ade6bfe78e700`, containing
+that tag ancestry, was atomically pushed and verified at both remote tips.
+This supersedes the original missing-master and local-only delivery statements.
+Both tag browser flows and all nine tag unit cases pass in the combined
+24-browser-test and 353-unit-test run. Production build also passes.
+Full TypeScript/strict lint retain 93 baseline diagnostics and 11 unchanged
+warnings; branch delivery is verified, not an all-checks-green claim.
+Complete integration evidence: `agent-records/2026-10-31-complete-branch-delivery.md`.

@@ -161,3 +161,15 @@ because the required checks fail. No successful integration is claimed.
 Unrelated existing work was preserved and is not part of this task's change.
 Remaining limitations: repository-wide failures and Chromium-only browser
 verification; read-only rendering was source-reviewed, not separately mounted.
+
+## Integration Follow-up: 2026-10-31
+
+The user authorized direct delivery of all pending local work to main/master.
+This supersedes the original local-only integration decision. Source commit
+`77b06df97e631a3a560e8fd4517ade6bfe78e700` was atomically pushed and verified
+as the exact tip of both remote branches. All six header browser tests pass
+at the original 0.25px threshold within the combined 24-test Chromium run.
+All 353 unit tests and production build pass. Full TypeScript/strict lint
+retain 93 baseline diagnostics and 11 unchanged warnings; global validation
+remains partial. The browser list fixture now uses the current API envelope.
+Complete integration evidence: `agent-records/2026-10-31-complete-branch-delivery.md`.

@@ -131,3 +131,14 @@ reported 8 master-only and 157 current-only commits. Merging the current branch
 would bring substantial unrelated UI/history changes into master.
 Do not redirect integration to main or merge unrelated history without task
 guidance. Existing repository-wide failures need separate authorized repair.
+
+## Integration Follow-up: 2026-10-31
+
+The user authorized direct delivery of all pending local work to main/master.
+This supersedes the original local-only integration decision. Source commit
+`77b06df97e631a3a560e8fd4517ade6bfe78e700` was atomically pushed and verified
+as the exact tip of both remote branches. All six gallery browser tests pass
+within the combined 24-test Chromium run; all 353 unit tests and production
+build pass. Full TypeScript/strict lint retain 93 baseline diagnostics and
+11 unchanged warnings, so repository-wide validation is still partial.
+Complete integration evidence: `agent-records/2026-10-31-complete-branch-delivery.md`.
